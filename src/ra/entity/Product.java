@@ -104,9 +104,9 @@ public class Product implements IProduct, Serializable {
         this.productId = inputProductId();
         System.out.print("Nhập vào tên sản phẩm (gồm 6-30 kí tự)= ");
         this.productName = inputProductName();
-        System.out.print("Nhập vào giá nhập của sản phẩm (số thực lơn hơn 0)= ");
+        System.out.print("Nhập vào giá nhập của sản phẩm (số thực lớn hơn 0)= ");
         this.importPrice = inputImportPrice();
-        System.out.print("Nhập vào giá bán của sản phẩm (số thực lơn hơn 0)= ");
+        System.out.print("Nhập vào giá bán của sản phẩm (số thực lớn hơn 0)= ");
         this.exportPrice = inputExportPrice(this.importPrice);
         System.out.print("Nhập vào mô tả của sản phẩm (không được bỏ trống)= ");
         this.productDescription = inputProductDescription();
@@ -134,16 +134,21 @@ public class Product implements IProduct, Serializable {
             if (inputProductId.length() == 0) {
                 System.err.println("Mã sản phẩm không được để trống , vui lòng nhập lại");
             } else {
-                //gồm 4 kí tự, bắt đầu bằng “P”
-                boolean isCheck = isCheckTrungProductId(inputProductId);
-                if (isCheck) {
-                    System.err.println("Mã sản phẩm đã bị trùng, vui lòng nhập lại");
-                } else {
-                    if (inputProductId.length() == 4 && inputProductId.charAt(0) == 'P') {
-                        return inputProductId;
+                try {
+                    //gồm 4 kí tự, bắt đầu bằng “P”
+                    boolean isCheck = isCheckTrungProductId(inputProductId);
+                    if (isCheck) {
+                        System.err.println("Mã sản phẩm đã bị trùng, vui lòng nhập lại");
                     } else {
-                        System.err.println("Mã sản phẩm phải gồm 4 ký tự bắt đầu là P,vui lòng nhập lại");
+                        if (inputProductId.length() == 4 && inputProductId.charAt(0) == 'P') {
+                            return inputProductId;
+                        } else {
+                            System.err.println("Mã sản phẩm phải gồm 4 ký tự bắt đầu là P,vui lòng nhập lại");
+                        }
                     }
+
+                } catch (Exception ex) {
+                    System.err.println("Lỗi hệ thống");
                 }
             }
         }
@@ -156,15 +161,20 @@ public class Product implements IProduct, Serializable {
             if (inputProductName.length() == 0) {
                 System.err.println("Tên sản phẩm không được để trống , vui lòng nhập lại");
             } else {
-                boolean isCheck = isCheckTrungProductName(inputProductName);
-                if (isCheck) {
-                    System.err.println("Tên sản phẩm đã bị trùng, vui lòng nhập lại");
-                } else {
-                    if (inputProductName.length() >= 6 && inputProductName.length() <= 30) {
-                        return inputProductName;
+                try {
+                    boolean isCheck = isCheckTrungProductName(inputProductName);
+                    if (isCheck) {
+                        System.err.println("Tên sản phẩm đã bị trùng, vui lòng nhập lại");
                     } else {
-                        System.err.println("Tên sản phẩm phải gồm 6-30 ký tự,vui lòng nhập lại");
+                        if (inputProductName.length() >= 6 && inputProductName.length() <= 30) {
+                            return inputProductName;
+                        } else {
+                            System.err.println("Tên sản phẩm phải gồm 6-30 ký tự,vui lòng nhập lại");
+                        }
                     }
+
+                } catch (Exception ex) {
+                    System.err.println("Lỗi hệ thống");
                 }
             }
         }
@@ -177,15 +187,20 @@ public class Product implements IProduct, Serializable {
             if (inputProductName.length() == 0) {
                 System.err.println("Tên sản phẩm không được để trống , vui lòng nhập lại");
             } else {
-                if (inputProductName.length() >= 6 && inputProductName.length() <= 30) {
-                    boolean isCheckName = isCheckTrungUpdateProductName(productIndex, inputProductName);
-                    if (isCheckName) {
-                        return inputProductName;
+                try {
+                    if (inputProductName.length() >= 6 && inputProductName.length() <= 30) {
+                        boolean isCheckName = isCheckTrungUpdateProductName(productIndex, inputProductName);
+                        if (isCheckName) {
+                            return inputProductName;
+                        } else {
+                            System.err.println("Tên sản phẩm đã bị trùng, vui lòng nhập lại");
+                        }
                     } else {
-                        System.err.println("Tên sản phẩm đã bị trùng, vui lòng nhập lại");
+                        System.err.println("Tên sản phẩm phải gồm 6-30 ký tự,vui lòng nhập lại");
                     }
-                } else {
-                    System.err.println("Tên sản phẩm phải gồm 6-30 ký tự,vui lòng nhập lại");
+
+                } catch (Exception ex) {
+                    System.err.println("Lỗi hệ thống");
                 }
             }
         }
@@ -247,6 +262,8 @@ public class Product implements IProduct, Serializable {
                     }
                 } catch (NumberFormatException ex) {
                     System.err.println("Giá nhập sản phẩm phải là số thực , vui lòng nhập lại");
+                } catch (Exception ex2) {
+                    System.err.println("Lỗi hệ thống");
                 }
 
             }
@@ -273,6 +290,8 @@ public class Product implements IProduct, Serializable {
                     }
                 } catch (NumberFormatException ex) {
                     System.err.println("Giá bán sản phẩm phải là số thực , vui lòng nhập lại");
+                } catch (Exception ex2) {
+                    System.err.println("Lỗi hệ thống");
                 }
 
             }
@@ -285,7 +304,11 @@ public class Product implements IProduct, Serializable {
             if (productDescription.length() == 0) {
                 System.err.println("Mô tả sản phẩm không được để trống, vui lòng nhập lại");
             } else {
-                return productDescription;
+                try {
+                    return productDescription;
+                } catch (Exception ex2) {
+                    System.err.println("Lỗi hệ thống");
+                }
             }
         }
     }

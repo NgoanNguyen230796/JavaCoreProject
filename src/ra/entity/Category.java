@@ -62,9 +62,9 @@ public class Category implements ICategory, Serializable {
     public void inputData() {
         System.out.print("Nhập vào mã danh mục (phải là số)= ");
         this.categoryId = inputCategoryId();
-        System.out.print("Nhập vào tên danh mục = ");
+        System.out.print("Nhập vào tên danh mục (từ 6-30 kí tự) = ");
         this.categoryName = inputCategoryName();
-        System.out.print("Nhập vào mô tả danh mục = ");
+        System.out.print("Nhập vào mô tả danh mục (không bỏ trống) = ");
         this.categoryDescription = inputCategoryDescription();
         System.out.print("Nhập vào trạng thái danh mục (true/false) = ");
         this.categoryStatus = inputCategoryStatus();
@@ -81,7 +81,7 @@ public class Category implements ICategory, Serializable {
         while (true) {
             String inputIdStr = sc.nextLine().trim();
             if (inputIdStr.length() == 0) {
-                System.err.println("Mã danh mục phải không được để trống, vui lòng nhập lại");
+                System.err.println("Mã danh mục không được để trống, vui lòng nhập lại");
             } else {
                 try {
                     int id = Integer.parseInt(inputIdStr);
@@ -97,6 +97,8 @@ public class Category implements ICategory, Serializable {
                     }
                 } catch (NumberFormatException ex) {
                     System.err.println("Mã danh mục phải là số, vui lòng nhập lại");
+                } catch (Exception ex2) {
+                    System.err.println("Lỗi hệ thống");
                 }
             }
         }
@@ -118,15 +120,20 @@ public class Category implements ICategory, Serializable {
             if (name.length() == 0) {
                 System.err.println("Tên danh mục không được để trống, vui lòng nhập lại");
             } else {
-                if (name.length() >= 6 && name.length() <= 30) {
-                    boolean isCheckName = isCheckTrungCategoryName(name);
-                    if (isCheckName) {
-                        System.err.println("Tên danh mục đã bị trùng, vui lòng nhập lại");
+                try {
+                    if (name.length() >= 6 && name.length() <= 30) {
+                        boolean isCheckName = isCheckTrungCategoryName(name);
+                        if (isCheckName) {
+                            System.err.println("Tên danh mục đã bị trùng, vui lòng nhập lại");
+                        } else {
+                            return name;
+                        }
                     } else {
-                        return name;
+                        System.err.println("Tên danh mục phải có độ dài từ 6-30 ký tự, vui lòng nhập lại");
                     }
-                } else {
-                    System.err.println("Tên danh mục phải có độ dài từ 6-30 ký tự, vui lòng nhập lại");
+
+                } catch (Exception ex) {
+                    System.err.println("Lỗi hệ thống");
                 }
             }
         }
@@ -139,15 +146,20 @@ public class Category implements ICategory, Serializable {
             if (name.length() == 0) {
                 System.err.println("Tên danh mục không được để trống, vui lòng nhập lại");
             } else {
-                if (name.length() >= 6 && name.length() <= 30) {
-                    boolean isCheckName = isCheckTrungUpdateCategoryName(categoryIndex, name);
-                    if (isCheckName) {
-                        return name;
+                try {
+                    if (name.length() >= 6 && name.length() <= 30) {
+                        boolean isCheckName = isCheckTrungUpdateCategoryName(categoryIndex, name);
+                        if (isCheckName) {
+                            return name;
+                        } else {
+                            System.err.println("Tên danh mục đã bị trùng, vui lòng nhập lại");
+                        }
                     } else {
-                        System.err.println("Tên danh mục đã bị trùng, vui lòng nhập lại");
+                        System.err.println("Tên danh mục phải có độ dài từ 6-30 ký tự, vui lòng nhập lại");
                     }
-                } else {
-                    System.err.println("Tên danh mục phải có độ dài từ 6-30 ký tự, vui lòng nhập lại");
+
+                } catch (Exception ex) {
+                    System.err.println("Lỗi hệ thống");
                 }
             }
         }
@@ -177,7 +189,6 @@ public class Category implements ICategory, Serializable {
                             return false;
                         }
                     }
-
                 }
                 return true;
             }
@@ -193,7 +204,11 @@ public class Category implements ICategory, Serializable {
             if (description.length() == 0) {
                 System.err.println("Mô tả danh mục không được để trống, vui lòng nhập lại");
             } else {
-                return description;
+                try {
+                    return description;
+                } catch (Exception ex) {
+                    System.err.println("Lỗi hệ thống");
+                }
             }
         }
     }
@@ -231,6 +246,8 @@ public class Category implements ICategory, Serializable {
                     }
                 } catch (NumberFormatException ex) {
                     System.err.println("Mã danh mục phải là số,vui lòng nhập lại");
+                } catch (Exception ex2) {
+                    System.err.println("Lỗi hệ thống");
                 }
             }
         }

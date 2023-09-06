@@ -171,15 +171,13 @@ public class Store {
                     break;
                 case 5:
                     Store.displayDataProductMenuByProductNameByAZ();
-                    Store.displayDataProductMenuByProductName();
                     break;
                 case 6:
                     Store.displayDataProductMenuByProfitByHighToLow();
-                    Store.displayDataProductMenuByProductName();
                     break;
                 case 7:
                     Store.displayDataProductMenuByProductName();
-                    Store.searchDataProductMenuByProductNamOrExportPriceOrimportPrice();
+                    Store.searchDataProductMenuByProductNamOrExportPriceOrImportPrice();
                     break;
                 case 8:
                     isExitProductMenu = false;
@@ -213,7 +211,6 @@ public class Store {
     //1.Thêm mới danh mục
     public static void inputDataCategoryMenu() {
         System.out.print("Nhập số lượng danh mục mà bạn muốn thêm :");
-
         while (true) {
             String inputNumberStr = sc.nextLine().trim();
             if (inputNumberStr.length() == 0) {
@@ -264,7 +261,7 @@ public class Store {
             System.out.print("Bạn muốn thay đổi tên danh mục" + " từ " + "[" + listCategory.get(index).getCategoryName() + "]" + " thành : ");
 //            listCategory.get(index).setCategoryName(Category.inputCategoryName());
             listCategory.get(index).setCategoryName(Category.inputUpdateCategoryName(index));
-            System.out.print("Bạn muốn thay đổi  mô tả danh mục" + " từ " + "[" + listCategory.get(index).getCategoryDescription() + "]" + " thành : ");
+            System.out.print("Bạn muốn thay đổi mô tả danh mục" + " từ " + "[" + listCategory.get(index).getCategoryDescription() + "]" + " thành : ");
             listCategory.get(index).setCategoryDescription(Category.inputCategoryDescription());
             System.out.print("Bạn muốn thay đổi trạng thái danh mục" + " từ " + "[" + listCategory.get(index).getCategoryStatus() + "]" + " thành : ");
             listCategory.get(index).setCategoryStatus(Category.inputCategoryStatus());
@@ -320,7 +317,9 @@ public class Store {
             if (searchDataByCategory.length() == 0) {
                 System.err.println("Tên danh mục mà bạn muốn tìm kiếm không được để trống,vui lòng nhập lại");
             } else {
-                List<Category> listCategoryFilter = listCategory.stream().filter(category -> category.getCategoryName().toLowerCase().contains(searchDataByCategory.toLowerCase())).collect(Collectors.toList());
+                List<Category> listCategoryFilter = listCategory.stream().filter(category ->
+                                category.getCategoryName().toLowerCase().contains(searchDataByCategory.toLowerCase()))
+                        .collect(Collectors.toList());
                 if (listCategoryFilter.size() == 0) {
                     System.out.println("Không tìm thấy kết quả");
                 } else {
@@ -373,11 +372,11 @@ public class Store {
                             product.inputData();
                             //2.Cho chọn sản phẩm thuộc danh mục nào-Hiển thị danh mục để cho người dùng chọn
                             String repeated = new String(new char[20]).replace("\0", border);
-                            System.out.println("*" + repeated + "Quản lý danh mục Men" + repeated + "*");
+                            System.out.println("* " + repeated + " Menu quản lý danh mục " + repeated + " *");
                             for (int j = 0; j < listCategory.size(); j++) {
                                 System.out.println((j + 1) + " . " + listCategory.get(j).getCategoryName());
                             }
-                            System.out.println("*" + repeated + repeated + repeated + "*");
+                            System.out.println("* " + repeated + repeated + repeated + "---" + " *");
                             System.out.print("Chọn danh mục mà bạn muốn thêm sản phẩm vào :");
                             while (true) {
                                 String inputChoiceNumberStr = sc.nextLine().trim();
@@ -386,7 +385,9 @@ public class Store {
                                 } else {
                                     try {
                                         int choiceNumber = Integer.parseInt(inputChoiceNumberStr);
-                                        if (choiceNumber > listCategory.size()) {
+                                        if (listCategory.size() == 1) {
+                                            System.err.println("Danh mục mà bạn muốn thêm sản phẩm vào phải thuộc danh mục,vui lòng nhập lại");
+                                        } else if (choiceNumber > listCategory.size()) {
                                             System.err.println("Danh mục mà bạn muốn thêm sản phẩm vào phải từ 1 đến " + listCategory.size() + ",vui lòng nhập lại");
                                         } else if (choiceNumber > 0) {
                                             product.setCategoryId(listCategory.get(choiceNumber - 1).getCategoryId());
@@ -399,6 +400,8 @@ public class Store {
                                         }
                                     } catch (NumberFormatException ex) {
                                         System.err.println("Danh mục mà bạn muốn thêm sản phẩm vào phải là số,vui lòng nhập lại");
+                                    } catch (Exception ex2) {
+                                        System.err.println("Lỗi hệ thống");
                                     }
                                 }
                             }
@@ -412,21 +415,12 @@ public class Store {
 
                 } catch (NumberFormatException ex) {
                     System.err.println("Số lượng sản phẩm mà bạn muốn thêm phải là số,vui lòng nhập lại");
+                } catch (Exception ex3) {
+                    System.err.println("Lỗi hệ thống");
                 }
 
             }
         }
-    }
-
-    public static void displayDataProductMenuByProductName() {
-        String repeated = new String(new char[186]).replace("\0", border);
-        System.out.println("* " + repeated + " *");
-        System.out.printf("| %-15s | %-30s | %-10s | %-10s | %-10s | %-40s | %-20s | %-30s |\n", "Mã sản phẩm", "Tên sản phẩm", "Giá nhập", "Giá bán", "Lợi nhuận", "Mô tả sản phẩm", "Trạng thái", "Tên danh mục thuộc về");
-        System.out.println("* ========================================================================================================================================================================================== *");
-        for (Product pr : listProduct) {
-            pr.displayData();
-        }
-        System.out.println("* " + repeated + " *");
     }
 
     //2. Cập nhật sản phẩm
@@ -457,18 +451,21 @@ public class Store {
                     //Update trạng thái sản phẩm
                     System.out.print("Bạn muốn thay đổi trạng thái từ " + "[" + listProduct.get(isCheckIndexProductId).getProductStatus() + "]" + " thành : ");
                     listProduct.get(isCheckIndexProductId).setProductStatus(Product.inputProductStatus());
-                    System.out.println("* ―――――――――――――― Quản lý danh mục Menu―――――――――――――― *");
+                    String repeated = new String(new char[20]).replace("\0", border);
+                    System.out.println("* " + repeated + " Menu quản lý danh mục " + repeated + " *");
                     for (int j = 0; j < listCategory.size(); j++) {
                         System.out.println((j + 1) + " . " + listCategory.get(j).getCategoryName());
                     }
-                    System.out.println("* ―――――――――――――――――――――――――――――――――――――――――― *");
+                    System.out.println("* " + repeated + repeated + repeated + "---" + " *");
                     System.out.print("Bạn muốn thay đổi danh mục sản phẩm thuộc về từ " + "[" + listCategory.get(isCheckFindIndex(listProduct.get(isCheckIndexProductId).getCategoryId())).getCategoryName() + "]" + " thành : ");
                     while (true) {
                         String choiceNumberStr = sc.nextLine().trim();
                         if (choiceNumberStr.length() != 0) {
                             try {
                                 int choiceNumber = Integer.parseInt(choiceNumberStr);
-                                if (choiceNumber > listCategory.size()) {
+                                if (listCategory.size() == 1) {
+                                    System.err.println("Danh mục mà bạn muốn thêm sản phẩm vào phải thuộc danh mục,vui lòng nhập lại");
+                                } else if (choiceNumber > listCategory.size()) {
                                     System.err.println("Danh mục mà bạn muốn thêm sản phẩm vào phải từ 1 đến " + listCategory.size() + ",vui lòng nhập lại");
                                 } else if (choiceNumber > 0) {
                                     listProduct.get(isCheckIndexProductId).setCategoryId(listCategory.get(choiceNumber - 1).getCategoryId());
@@ -478,6 +475,8 @@ public class Store {
                                 }
                             } catch (NumberFormatException ex) {
                                 System.err.println("Danh mục mà bạn muốn thêm sản phẩm vào phải là số,vui lòng nhập lại");
+                            } catch (Exception ex2) {
+                                System.err.println("Lỗi hệ thống");
                             }
                         } else {
                             System.err.println("Danh mục mà bạn muốn thêm sản phẩm không được để trống,vui lòng nhập lại");
@@ -517,28 +516,55 @@ public class Store {
         }
     }
 
-    //4.Hiển thị sản phẩm theo tên A-Z
+    //4.Hiển thị sản phẩm
+    public static void displayDataProductMenuByProductName() {
+        String repeated = new String(new char[186]).replace("\0", border);
+        System.out.println("* " + repeated + " *");
+        System.out.printf("| %-15s | %-30s | %-10s | %-10s | %-10s | %-40s | %-20s | %-30s |\n", "Mã sản phẩm", "Tên sản phẩm", "Giá nhập", "Giá bán", "Lợi nhuận", "Mô tả sản phẩm", "Trạng thái", "Tên danh mục thuộc về");
+        System.out.println("* ========================================================================================================================================================================================== *");
+        listProduct = ProductFile.readProductDataFromFile();
+        for (Product pr : listProduct) {
+            pr.displayData();
+        }
+        System.out.println("* " + repeated + " *");
+    }
+
+    //5.Hiển thị sản phẩm theo tên A-Z
     public static void displayDataProductMenuByProductNameByAZ() {
         System.out.println("Sản phẩm được sắp xếp theo tên từ A-Z là :");
-        listProduct.sort(Comparator.comparing(Product::getProductName));
+        List<Product> listProductByAZ = listProduct;
+        listProductByAZ.sort(Comparator.comparing(Product::getProductName));
+        String repeated = new String(new char[186]).replace("\0", border);
+        System.out.println("* " + repeated + " *");
+        System.out.printf("| %-15s | %-30s | %-10s | %-10s | %-10s | %-40s | %-20s | %-30s |\n", "Mã sản phẩm", "Tên sản phẩm", "Giá nhập", "Giá bán", "Lợi nhuận", "Mô tả sản phẩm", "Trạng thái", "Tên danh mục thuộc về");
+        System.out.println("* ========================================================================================================================================================================================== *");
+        listProductByAZ.forEach(Product::displayData);
+        System.out.println("* " + repeated + " *");
 
     }
 
-    //5.Hiển thị sản phẩm theo lợi nhuận từ cao-thấp
+    //6.Hiển thị sản phẩm theo lợi nhuận từ cao-thấp
     public static void displayDataProductMenuByProfitByHighToLow() {
         System.out.println("Sản phẩm được sắp xếp theo lợi nhuận từ cao-thấp là :");
-        listProduct.sort(Comparator.comparing(Product::getProductProfit).reversed());
+        List<Product> listProductByProfitByHighToLow = listProduct;
+        listProductByProfitByHighToLow.sort(Comparator.comparing(Product::getProductProfit).reversed());
+        String repeated = new String(new char[186]).replace("\0", border);
+        System.out.println("* " + repeated + " *");
+        System.out.printf("| %-15s | %-30s | %-10s | %-10s | %-10s | %-40s | %-20s | %-30s |\n", "Mã sản phẩm", "Tên sản phẩm", "Giá nhập", "Giá bán", "Lợi nhuận", "Mô tả sản phẩm", "Trạng thái", "Tên danh mục thuộc về");
+        System.out.println("* ========================================================================================================================================================================================== *");
+        listProductByProfitByHighToLow.forEach(Product::displayData);
+        System.out.println("* " + repeated + " *");
+
     }
 
-    //6.Tìm kiếm các sản phẩm có tên hoặc giá nhập/xuất chứa từ khóa tìm kiếm
-    public static void searchDataProductMenuByProductNamOrExportPriceOrimportPrice() {
+    //7.Tìm kiếm các sản phẩm có tên hoặc giá nhập/xuất chứa từ khóa tìm kiếm
+    public static void searchDataProductMenuByProductNamOrExportPriceOrImportPrice() {
         System.out.print("Nhập vào tên sản phẩm hoặc giá nhập/xuất của sản phẩm mà bạn muốn tìm kiếm thông tin = ");
         while (true) {
             String searchData = sc.nextLine().trim();
             if (searchData.length() == 0) {
                 System.err.println("Tìm kiếm sản phẩm không được để trống,vui lòng nhập lại");
             } else {
-
                 List<Product> listProductFilter = listProduct.stream().filter(product ->
                         product.getProductName().toLowerCase().contains(searchData.toLowerCase()) ||
                                 String.valueOf(product.getImportPrice()).contains(searchData) ||
