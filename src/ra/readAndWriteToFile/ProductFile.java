@@ -76,6 +76,8 @@ public class ProductFile {
                 is.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception ex) {
+                System.out.println("Lỗi hệ thống");
             }
         }
     }
@@ -86,6 +88,8 @@ public class ProductFile {
                 os.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception ex) {
+                System.out.println("Lỗi hệ thống");
             }
         }
     }

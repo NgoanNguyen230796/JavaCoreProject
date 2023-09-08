@@ -52,7 +52,7 @@ public class Store {
     public static int validateChoiceMain() {
         while (true) {
             String inputChoiceMain = sc.nextLine().trim();
-            if (inputChoiceMain.length() == 0) {
+            if (inputChoiceMain.isEmpty()) {
                 System.err.println("Lựa chọn các mục trong QUẢN LÝ KHO không được để trống,vui lòng nhập lại");
             } else {
                 try {
@@ -119,7 +119,7 @@ public class Store {
     public static int validateChoiceCategoryMenu() {
         while (true) {
             String inputChoiceCategoryMenuStr = sc.nextLine().trim();
-            if (inputChoiceCategoryMenuStr.length() == 0) {
+            if (inputChoiceCategoryMenuStr.isEmpty()) {
                 System.err.println("Lựa chọn các mục trong QUẢN LÝ DANH MỤC không được để trống,vui lòng nhập lại");
             } else {
                 try {
@@ -191,7 +191,7 @@ public class Store {
     public static int validateChoiceProductMenu() {
         while (true) {
             String inputChoiceProductMenuStr = sc.nextLine().trim();
-            if (inputChoiceProductMenuStr.length() == 0) {
+            if (inputChoiceProductMenuStr.isEmpty()) {
                 System.err.println("Lựa chọn các mục trong QUẢN LÝ SẢN PHẨM không được để trống,vui lòng nhập lại");
             } else {
                 try {
@@ -213,7 +213,7 @@ public class Store {
         System.out.print("Nhập số lượng danh mục mà bạn muốn thêm :");
         while (true) {
             String inputNumberStr = sc.nextLine().trim();
-            if (inputNumberStr.length() == 0) {
+            if (inputNumberStr.isEmpty()) {
                 System.err.println("Số lượng danh mục mà bạn muốn thêm không được để trống,vui lòng nhập lại");
             } else {
                 try {
@@ -226,7 +226,7 @@ public class Store {
                             listCategory.add(categories);
                             CategoryFile.writeCategoryDataToFile(listCategory);
                         }
-                        System.out.println("Đã thêm mới danh mục sản phẩm xong");
+                        System.out.println(Colors.BLUE_BOLD + "Đã thêm mới danh mục sản phẩm xong" + Colors.ANSI_RESET);
                         break;
                     } else {
                         System.err.println("Số lượng danh mục mà bạn muốn thêm phải là số nguyên lớn hơn 0,vui lòng nhập lại");
@@ -266,9 +266,9 @@ public class Store {
             System.out.print("Bạn muốn thay đổi trạng thái danh mục" + " từ " + "[" + listCategory.get(index).getCategoryStatus() + "]" + " thành : ");
             listCategory.get(index).setCategoryStatus(Category.inputCategoryStatus());
             CategoryFile.writeCategoryDataToFile(listCategory);
-            System.out.println("Đã cập nhật xong thông tin");
+            System.out.println(Colors.BLUE_BOLD + "Đã cập nhật xong thông tin" + Colors.ANSI_RESET);
         } else {
-            System.out.println("Không tìm thấy thông tin với mã danh mục mà bạn vừa nhập");
+            System.out.println(Colors.BLUE_BOLD + "Không tìm thấy thông tin với mã danh mục mà bạn vừa nhập" + Colors.ANSI_RESET);
         }
     }
 
@@ -277,7 +277,7 @@ public class Store {
         System.out.print("Nhập vào mã danh mục mà bạn muốn xóa thông tin =");
         while (true) {
             String inputCatalogIdFindStr = sc.nextLine().trim();
-            if (inputCatalogIdFindStr.length() == 0) {
+            if (inputCatalogIdFindStr.isEmpty()) {
                 System.err.println("Mã danh mục không được để trống,vui lòng nhập lại");
             } else {
                 try {
@@ -285,15 +285,15 @@ public class Store {
                     if (catalogIdFind > 0) {
                         int isCheckFind = isCheckFindIndex(catalogIdFind);
                         if (isCheckFind < 0) {
-                            System.out.println("Không tìm thấy mã danh mục : " + catalogIdFind + " mà bạn muốn xóa");
+                            System.out.println(Colors.BLUE_BOLD + "Không tìm thấy mã danh mục : " + catalogIdFind + " mà bạn muốn xóa" + Colors.ANSI_RESET);
                         } else {
                             boolean isCheckCatalogIdByCatalogIdInProduct = isCheckCatalogIdInListProduct(catalogIdFind);
                             if (!isCheckCatalogIdByCatalogIdInProduct) {
                                 listCategory.remove(isCheckFind);
                                 CategoryFile.writeCategoryDataToFile(listCategory);
-                                System.out.println("Đã xóa xong danh mục với mã danh mục là:" + catalogIdFind);
+                                System.out.println(Colors.BLUE_BOLD + "Đã xóa xong danh mục với mã danh mục là:" + catalogIdFind + Colors.ANSI_RESET);
                             } else {
-                                System.out.println("Rất tiếc mã danh mục " + catalogIdFind + " có chứa sản phẩm,không thể xóa danh mục này");
+                                System.out.println(Colors.BLUE_BOLD + "Rất tiếc mã danh mục " + catalogIdFind + " có chứa sản phẩm,không thể xóa danh mục này" + Colors.ANSI_RESET);
                             }
                         }
                         break;
@@ -314,14 +314,15 @@ public class Store {
         System.out.print("Nhập vào tên danh mục mà bạn muốn tìm kiếm = ");
         while (true) {
             String searchDataByCategory = sc.nextLine().trim();
-            if (searchDataByCategory.length() == 0) {
+            if (searchDataByCategory.isEmpty()) {
+
                 System.err.println("Tên danh mục mà bạn muốn tìm kiếm không được để trống,vui lòng nhập lại");
             } else {
                 List<Category> listCategoryFilter = listCategory.stream().filter(category ->
                                 category.getCategoryName().toLowerCase().contains(searchDataByCategory.toLowerCase()))
                         .collect(Collectors.toList());
-                if (listCategoryFilter.size() == 0) {
-                    System.out.println("Không tìm thấy kết quả");
+                if (listCategoryFilter.isEmpty()) {
+                    System.out.println(Colors.BLUE_BOLD + "Không tìm thấy kết quả" + Colors.ANSI_RESET);
                 } else {
                     String repeated = new String(new char[123]).replace("\0", border);
                     System.out.println("* " + repeated + " *");
@@ -360,7 +361,7 @@ public class Store {
         System.out.print("Nhập số lượng sản phẩm mà bạn muốn thêm :");
         while (true) {
             String inputNumberStr = sc.nextLine().trim();
-            if (inputNumberStr.length() == 0) {
+            if (inputNumberStr.isEmpty()) {
                 System.err.println("Số lượng sản phẩm mà bạn muốn thêm không được để trống,vui lòng nhập lại");
             } else {
                 try {
@@ -380,7 +381,7 @@ public class Store {
                             System.out.print("Chọn danh mục mà bạn muốn thêm sản phẩm vào :");
                             while (true) {
                                 String inputChoiceNumberStr = sc.nextLine().trim();
-                                if (inputChoiceNumberStr.length() == 0) {
+                                if (inputChoiceNumberStr.isEmpty()) {
                                     System.err.println("Danh mục mà bạn muốn thêm sản phẩm vào không được để trống,vui lòng nhập lại");
                                 } else {
                                     try {
@@ -407,7 +408,7 @@ public class Store {
                             }
 
                         }
-                        System.out.println("Đã thêm mới sản phẩm xong");
+                        System.out.println(Colors.BLUE_BOLD + "Đã thêm mới sản phẩm xong" + Colors.ANSI_RESET);
                         break;
                     } else {
                         System.err.println("Số lượng sản phẩm mà bạn muốn thêm phải là số nguyên lớn hơn 0,vui lòng nhập lại");
@@ -428,12 +429,12 @@ public class Store {
         System.out.print("Nhập vào mã sản phẩm mà bạn muốn thay đổi thông tin =");
         while (true) {
             String inputProductId = sc.nextLine().trim();
-            if (inputProductId.length() == 0) {
+            if (inputProductId.isEmpty()) {
                 System.err.println("Mã sản phẩm không được để trống,vui lòng nhập lại");
             } else {
                 int isCheckIndexProductId = indexDataProductIdFind(inputProductId);
                 if (isCheckIndexProductId < 0) {
-                    System.out.println("Không tìm thấy mã sản phẩm: " + inputProductId + " mà bạn muốn cập nhật thông tin");
+                    System.out.println(Colors.BLUE_BOLD + "Không tìm thấy mã sản phẩm: " + inputProductId + " mà bạn muốn cập nhật thông tin" + Colors.ANSI_RESET);
                 } else {
                     //Update tên sản phẩm
                     System.out.print("Bạn muốn thay đổi tên sản phẩm từ " + "[" + listProduct.get(isCheckIndexProductId).getProductName() + "]" + " thành : ");
@@ -460,7 +461,7 @@ public class Store {
                     System.out.print("Bạn muốn thay đổi danh mục sản phẩm thuộc về từ " + "[" + listCategory.get(isCheckFindIndex(listProduct.get(isCheckIndexProductId).getCategoryId())).getCategoryName() + "]" + " thành : ");
                     while (true) {
                         String choiceNumberStr = sc.nextLine().trim();
-                        if (choiceNumberStr.length() != 0) {
+                        if (!choiceNumberStr.isEmpty()) {
                             try {
                                 int choiceNumber = Integer.parseInt(choiceNumberStr);
                                 if (listCategory.size() == 1) {
@@ -486,7 +487,7 @@ public class Store {
                     //Tính lợi nhuận sản phẩm
                     listProduct.get(isCheckIndexProductId).calProfit();
                     ProductFile.writeProductDataToFile(listProduct);
-                    System.out.println("Đã cập nhật thành công thông tin với mã sản phẩm là " + inputProductId);
+                    System.out.println(Colors.BLUE_BOLD + "Đã cập nhật thành công thông tin với mã sản phẩm là " + inputProductId + Colors.ANSI_RESET);
                 }
                 break;
             }
@@ -500,16 +501,16 @@ public class Store {
         System.out.print("Nhập vào mã sản phẩm mà bạn muốn xóa thông tin =");
         while (true) {
             String productIdFind = sc.nextLine().trim();
-            if (productIdFind.length() == 0) {
+            if (productIdFind.isEmpty()) {
                 System.err.println("Mã sản phẩm không được để trống,vui lòng nhập lại");
             } else {
                 int isCheckFind = indexDataProductIdFind(productIdFind);
                 if (isCheckFind < 0) {
-                    System.out.println("Không tìm thấy mã sản phẩm :" + productIdFind + " mà bạn muốn xóa thông tin");
+                    System.out.println(Colors.BLUE_BOLD + "Không tìm thấy mã sản phẩm :" + productIdFind + " mà bạn muốn xóa thông tin" + Colors.ANSI_RESET);
                 } else {
                     listProduct.remove(isCheckFind);
                     ProductFile.writeProductDataToFile(listProduct);
-                    System.out.println("Đã xóa xong sản phẩm với mã sản phẩm là:" + productIdFind);
+                    System.out.println(Colors.BLUE_BOLD + "Đã xóa xong sản phẩm với mã sản phẩm là:" + productIdFind + Colors.ANSI_RESET);
                 }
                 break;
             }
@@ -562,15 +563,15 @@ public class Store {
         System.out.print("Nhập vào tên sản phẩm hoặc giá nhập/xuất của sản phẩm mà bạn muốn tìm kiếm thông tin = ");
         while (true) {
             String searchData = sc.nextLine().trim();
-            if (searchData.length() == 0) {
+            if (searchData.isEmpty()) {
                 System.err.println("Tìm kiếm sản phẩm không được để trống,vui lòng nhập lại");
             } else {
                 List<Product> listProductFilter = listProduct.stream().filter(product ->
                         product.getProductName().toLowerCase().contains(searchData.toLowerCase()) ||
                                 String.valueOf(product.getImportPrice()).contains(searchData) ||
                                 String.valueOf(product.getExportPrice()).contains(searchData)).collect(Collectors.toList());
-                if (listProductFilter.size() == 0) {
-                    System.out.println("Không tìm thấy kết quả");
+                if (listProductFilter.isEmpty()) {
+                    System.out.println(Colors.BLUE_BOLD + "Không tìm thấy kết quả" + Colors.ANSI_RESET);
                 } else {
                     String repeated = new String(new char[186]).replace("\0", border);
                     System.out.println("* " + repeated + " *");

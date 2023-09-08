@@ -116,7 +116,8 @@ public class Product implements IProduct, Serializable {
 
     @Override
     public void displayData() {
-        //String productId, String productName, double importPrice, double exportPrice, double productProfit, String productDescription, boolean productStatus
+
+
         //this.productId, this.productName, this.importPrice, this.exportPrice, this.productProfit, this.productDescription, statusValue, listCategory.get(isCheckFindIndex(this.getCategoryId())).getCategoryName()
         String statusValue = this.productStatus ? "Còn hàng" : "Ngừng kinh doanh";
         //| %-15s | %-30s | %-10s | %-10s | %-10s | %-40s | %-20s | %-30s |
